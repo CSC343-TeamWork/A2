@@ -40,6 +40,7 @@ FROM Take
 WHERE date("2019-9-4") = date(Date) AND ShipID IN (SELECT ShipID
 		 			FROM Run
 		 			WHERE RouteID = 1);
+					
 -- ++++++++++++++++++++
 --  Q3.A
 -- ++++++++++++++++++++
@@ -54,10 +55,10 @@ WHERE AdvertisingRevenue > 10000;
 SELECT FirstName, LastName, YearsOfService, ShipID
 FROM Pilot, Person, Ship
 WHERE Pilot.SIN = Person.SIN AND (Person.SIN, Ship.ShipID) IN (SELECT *
-															                                 FROM Operate
-															                                 WHERE ShipID IN (SELECT ShipID 
-																				                                        FROM Ship
-																				                                        WHERE AdvertisingRevenue = (SELECT MAX(AdvertisingRevenue) 
+				                               FROM Operate
+							       WHERE ShipID IN (SELECT ShipID 
+							       			FROM Ship
+							       		   	WHERE AdvertisingRevenue = (SELECT MAX(AdvertisingRevenue) 
 																											                                                      FROM Ship)))  
 -- ++++++++++++++++++++
 --  Q3.C
