@@ -29,7 +29,7 @@
 
 SELECT COUNT(*) AS "TotalSeniors"
 FROM Person
-WHERE date(DateOfBirth) <= "1954-11-14";
+WHERE DateOfBirth <= "1954-11-14";
 
 -- ++++++++++++++++++++
 --  Q2
@@ -37,7 +37,7 @@ WHERE date(DateOfBirth) <= "1954-11-14";
 
 SELECT COUNT(*) AS "Taken"
 FROM Take
-WHERE date("2019-9-4") = date(Date) AND ShipID IN (SELECT ShipID
+WHERE "2019-9-4" = Date AND ShipID IN (SELECT ShipID
 		 			FROM Run
 		 			WHERE RouteID = 1);
 					
@@ -94,7 +94,7 @@ HAVING revenue > 500;
 SELECT MAX(revenue)
 FROM (SELECT Passenger.Type ,SUM(Fare.Fee) AS revenue
 	  FROM Passenger, Fare
-	  WHERE Passenger.Type = Fare.Type AND Passenger.SIN IN (SELECT SIN FROM Take WHERE date(Take.Date) = date("2019-9-1") )
+	  WHERE Passenger.Type = Fare.Type AND Passenger.SIN IN (SELECT SIN FROM Take WHERE Take.Date = "2019-9-1" )
 	  GROUP BY Passenger.Type) REV ;
     
 -- ++++++++++++++++++++
