@@ -101,31 +101,53 @@ FROM (SELECT Passenger.Type ,SUM(Fare.Fee) AS revenue
 --  Q5.A
 -- ++++++++++++++++++++
 
--- Your code goes here (replace this line with your query)
+SELECT pilot.SIN, FirstName, LastName, FLOOR(datediff("2019-11-04 12:00:00", DateOfBirth)/365) AS "Age"
+FROM person, pilot
+WHERE person.SIN = pilot.SIN AND pilot.SIN IN (SELECT SIN
+					       FROM infraction
+					       GROUP BY SIN
+					       HAVING COUNT(*) < 3)
+
 
 -- ++++++++++++++++++++
 --  Q5.B
 -- ++++++++++++++++++++
 
--- Your code goes here (replace this line with your query)
-
+SELECT SIN, SUM(Demerit) AS TotalDemerit, SUM(Fine) AS TotlaFine
+FROM infraction
+GROUP BY SIN
+HAVING TotalDemerit > 2
+ORDER BY TotalDemerit DESC
 -- ++++++++++++++++++++
 --  Q6.A
 -- ++++++++++++++++++++
 
--- Your code goes here (replace this line with your query)
-
+SELECT ShipID, Manufacturer
+FROM Ship
+GROUP BY Manufacturer
+HAVING COUNT(ShipID) = 1
 -- ++++++++++++++++++++
 --  Q6.B
 -- ++++++++++++++++++++
 
--- Your code goes here (replace this line with your query)
+
+SELECT Run.RouteID, numofpass.total
+FROM (SELECT ShipID, COUNT(SIN) AS total 
+      FROM Take
+      GROUP BY ShipID) numofpass, Run
+WHERE Run.ShipID = numofpass.ShipID AND numofpass.total =  (SELECT MAX(numofpass.total)
+							    FROM (SELECT ShipID, COUNT(SIN) AS total 
+								  FROM Take
+		     						  GROUP BY ShipID))
 
 -- ++++++++++++++++++++
 --  Q6.C
 -- ++++++++++++++++++++
 
--- Your code goes here (replace this line with your query)
+SELECT pass.Date, MAX(pass.total_pass) AS "trips taken"
+FROM (SELECT Take.Date, COUNT(SIN) AS total_pass
+	  FROM Take
+	  GROUP BY Take.Date) pass
 
 -- ++++++++++++++++++++
 --  Q7.A
@@ -143,8 +165,12 @@ FROM (SELECT Passenger.Type ,SUM(Fare.Fee) AS revenue
 --  Q8
 -- ++++++++++++++++++++
 
--- Your code goes here (replace this line with your query)
-
+SELECT FirstName, LastName, Person.SIN
+FROM Pilot, Person
+WHERE Pilot.SIN = Person.SIN AND YearsOfService > 5 AND Salary > 75000 AND Pilot.SIN IN (SELECT SIN
+											 FROM Infraction
+											 GROUP BY SIN
+											 HAVING SUM(Demerit) < 9)
 -- ++++++++++++++++++++
 --  Q9
 -- ++++++++++++++++++++
