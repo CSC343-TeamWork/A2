@@ -37,7 +37,7 @@ WHERE DateOfBirth <= "1954-11-14";
 
 SELECT COUNT(*) AS "Taken"
 FROM Take
-WHERE "2019-9-4" = Date AND ShipID IN (SELECT ShipID
+WHERE "2019-09-04" = Date AND ShipID IN (SELECT ShipID
 		 			FROM Run
 		 			WHERE RouteID = 1);
 					
@@ -73,7 +73,7 @@ FROM Ship, (SELECT RouteId, SUM(AdvertisingRevenue)
 --  Q4.A
 -- ++++++++++++++++++++
 
-SELECT Passenger.Type ,SUM(Fare.Fee) AS revenue
+SELECT Passenger.Type, SUM(Fare.Fee) AS revenue
 FROM Passenger, Fare
 WHERE Passenger.Type = Fare.Type
 GROUP BY Passenger.Type;
@@ -94,7 +94,7 @@ HAVING revenue > 500;
 SELECT MAX(revenue)
 FROM (SELECT Passenger.Type ,SUM(Fare.Fee) AS revenue
 	  FROM Passenger, Fare
-	  WHERE Passenger.Type = Fare.Type AND Passenger.SIN IN (SELECT SIN FROM Take WHERE Take.Date = "2019-9-1" )
+	  WHERE Passenger.Type = Fare.Type AND Passenger.SIN IN (SELECT SIN FROM Take WHERE Take.Date = "2019-09-01" )
 	  GROUP BY Passenger.Type) REV ;
     
 -- ++++++++++++++++++++
