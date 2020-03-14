@@ -59,7 +59,7 @@ WHERE Pilot.SIN = Person.SIN AND (Person.SIN, Ship.ShipID) IN (SELECT *
 							       WHERE ShipID IN (SELECT ShipID 
 							       			FROM Ship
 							       		   	WHERE AdvertisingRevenue = (SELECT MAX(AdvertisingRevenue) 
-																											                                                      FROM Ship)))  
+													    FROM Ship)));  
 -- ++++++++++++++++++++
 --  Q3.C
 -- ++++++++++++++++++++
@@ -91,8 +91,8 @@ HAVING revenue > 500;
 --  Q4.C
 -- ++++++++++++++++++++
 
-SELECT MAX(revenue)
-FROM (SELECT Passenger.Type ,SUM(Fare.Fee) AS revenue
+SELECT REV.Type AS Type, MAX(revenue) AS revenue
+FROM (SELECT Passenger.Type AS Type ,SUM(Fare.Fee) AS revenue
 	  FROM Passenger, Fare
 	  WHERE Passenger.Type = Fare.Type AND Passenger.SIN IN (SELECT SIN FROM Take WHERE Take.Date = "2019-09-01" )
 	  GROUP BY Passenger.Type) REV ;
@@ -106,18 +106,18 @@ FROM person, pilot
 WHERE person.SIN = pilot.SIN AND pilot.SIN IN (SELECT SIN
 					       FROM infraction
 					       GROUP BY SIN
-					       HAVING COUNT(*) < 3)
+					       HAVING COUNT(*) < 3) ;
 
 
 -- ++++++++++++++++++++
 --  Q5.B
 -- ++++++++++++++++++++
 
-SELECT SIN, SUM(Demerit) AS TotalDemerit, SUM(Fine) AS TotlaFine
+SELECT SIN, SUM(Demerit) AS TotalDemerit, SUM(Fine) AS TotalFine
 FROM infraction
 GROUP BY SIN
 HAVING TotalDemerit > 2
-ORDER BY TotalDemerit DESC
+ORDER BY TotalDemerit DESC ;
 -- ++++++++++++++++++++
 --  Q6.A
 -- ++++++++++++++++++++
@@ -125,7 +125,7 @@ ORDER BY TotalDemerit DESC
 SELECT ShipID, Manufacturer
 FROM Ship
 GROUP BY Manufacturer
-HAVING COUNT(ShipID) = 1
+HAVING COUNT(ShipID) = 1 ;
 -- ++++++++++++++++++++
 --  Q6.B
 -- ++++++++++++++++++++
@@ -138,7 +138,7 @@ FROM (SELECT ShipID, COUNT(SIN) AS total
 WHERE Run.ShipID = numofpass.ShipID AND numofpass.total =  (SELECT MAX(numofpass.total)
 							    FROM (SELECT ShipID, COUNT(SIN) AS total 
 								  FROM Take
-		     						  GROUP BY ShipID))
+		     						  GROUP BY ShipID) Temp);
 
 -- ++++++++++++++++++++
 --  Q6.C
@@ -147,7 +147,7 @@ WHERE Run.ShipID = numofpass.ShipID AND numofpass.total =  (SELECT MAX(numofpass
 SELECT pass.Date, MAX(pass.total_pass) AS "trips taken"
 FROM (SELECT Take.Date, COUNT(SIN) AS total_pass
 	  FROM Take
-	  GROUP BY Take.Date) pass
+	  GROUP BY Take.Date) pass ;
 
 -- ++++++++++++++++++++
 --  Q7.A
@@ -170,12 +170,16 @@ FROM Pilot, Person
 WHERE Pilot.SIN = Person.SIN AND YearsOfService > 5 AND Salary > 75000 AND Pilot.SIN IN (SELECT SIN
 											 FROM Infraction
 											 GROUP BY SIN
-											 HAVING SUM(Demerit) < 9)
+											 HAVING SUM(Demerit) < 9);
 -- ++++++++++++++++++++
 --  Q9
 -- ++++++++++++++++++++
 
--- Your code goes here (replace this line with your query)
+SELECT FirstName, LastName, Sex, Number, Person.SIN
+FROM Person, Phone
+WHERE Person.SIN = Phone.SIN AND Person.SIN IN (SELECT Take.SIN
+FROM Take, Run, Go
+WHERE Take.ShipID = Run.ShipID AND Run.RouteID = 4);
 
 -- ++++++++++++++++++++
 --  Q10
