@@ -133,7 +133,7 @@ SELECT Run.RouteID, numofpass.total
 FROM (SELECT ShipID, COUNT(SIN) AS total 
       FROM Take
       GROUP BY ShipID) numofpass, Run
-WHERE Run.ShipID = numofpass.ShipID AND numofpass.total =  (SELECT MAX(numofpass.total)
+WHERE Run.ShipID = numofpass.ShipID AND numofpass.total =  (SELECT MAX(Temp.total)
 							    FROM (SELECT ShipID, COUNT(SIN) AS total 
 								  FROM Take
 		     						  GROUP BY ShipID) Temp);
