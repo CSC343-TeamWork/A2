@@ -162,8 +162,13 @@ GROUP BY Person.Occupation;
 --  Q7.B
 -- ++++++++++++++++++++
 
--- Your code goes here (replace this line with your query)
-
+SELECT Person.Occupation, uniqtable.temp_DATE
+FROM Person, (SELECT DISTINCT Person.SIN AS temp_SIN, Go.SIname, Take.Date AS temp_DATE
+			  FROM Take, Person, Go
+			  WHERE Go.SIName REGEXP "Library" AND Go.RouteID = Run.RouteID AND Take.ShipID = Run.ShipID AND temp_DATE IN ("2019-09-05", "2019-09-06") AND Person.SIN = Take.SIN) uniqtable
+WHERE Person.SIN = uniqtable.temp_SIN
+GROUP BY Person.Occupation
+ORDER BY COUNT(*);
 -- ++++++++++++++++++++
 --  Q8
 -- ++++++++++++++++++++
