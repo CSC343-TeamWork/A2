@@ -38,8 +38,8 @@ WHERE DateOfBirth <= "1954-11-14";
 SELECT COUNT(*) AS "Taken"
 FROM Take
 WHERE "2019-09-04" = Date AND ShipID IN (SELECT ShipID
-		 			FROM Run
-		 			WHERE RouteID = 1);
+		 			 FROM Run
+		 			 WHERE RouteID = 1);
 					
 -- ++++++++++++++++++++
 --  Q3.A
@@ -63,12 +63,10 @@ WHERE Pilot.SIN = Person.SIN AND (Person.SIN, Ship.ShipID) IN (SELECT *
 -- ++++++++++++++++++++
 --  Q3.C
 -- ++++++++++++++++++++
-
-SELECT *
-FROM Ship, (SELECT RouteId, SUM(AdvertisingRevenue)
-            FROM Ship, Route, Run 
-            WHERE Ship.ShipID = Run.ShipID AND Route.RouteID = Run.RouteID
-            GROUP BY Route.RouteID) revenues;
+SELECT RouteId, SUM(AdvertisingRevenue) AS "Total Revenue"
+FROM Ship, Route, Run 
+WHERE Ship.ShipID = Run.ShipID AND Route.RouteID = Run.RouteID
+GROUP BY Route.RouteID;
 -- ++++++++++++++++++++
 --  Q4.A
 -- ++++++++++++++++++++
@@ -93,9 +91,9 @@ HAVING revenue > 500;
 
 SELECT REV.Type AS Type, MAX(revenue) AS revenue
 FROM (SELECT Passenger.Type AS Type ,SUM(Fare.Fee) AS revenue
-	  FROM Passenger, Fare
-	  WHERE Passenger.Type = Fare.Type AND Passenger.SIN IN (SELECT SIN FROM Take WHERE Take.Date = "2019-09-01" )
-	  GROUP BY Passenger.Type) REV ;
+      FROM Passenger, Fare
+      WHERE Passenger.Type = Fare.Type AND Passenger.SIN IN (SELECT SIN FROM Take WHERE Take.Date = "2019-09-01" )
+      GROUP BY Passenger.Type) REV ;
     
 -- ++++++++++++++++++++
 --  Q5.A
@@ -146,8 +144,8 @@ WHERE Run.ShipID = numofpass.ShipID AND numofpass.total =  (SELECT MAX(numofpass
 
 SELECT pass.Date, MAX(pass.total_pass) AS "trips taken"
 FROM (SELECT Take.Date, COUNT(SIN) AS total_pass
-	  FROM Take
-	  GROUP BY Take.Date) pass ;
+      FROM Take
+      GROUP BY Take.Date) pass;
 
 -- ++++++++++++++++++++
 --  Q7.A
@@ -178,8 +176,8 @@ WHERE Pilot.SIN = Person.SIN AND YearsOfService > 5 AND Salary > 75000 AND Pilot
 SELECT FirstName, LastName, Sex, Number, Person.SIN
 FROM Person, Phone
 WHERE Person.SIN = Phone.SIN AND Person.SIN IN (SELECT Take.SIN
-FROM Take, Run, Go
-WHERE Take.ShipID = Run.ShipID AND Run.RouteID = 4);
+						FROM Take, Run, Go
+						WHERE Take.ShipID = Run.ShipID AND Run.RouteID = 4);
 
 -- ++++++++++++++++++++
 --  Q10
