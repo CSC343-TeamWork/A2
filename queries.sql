@@ -127,15 +127,16 @@ HAVING COUNT(ShipID) = 1 ;
 -- ++++++++++++++++++++
 
 
-SELECT Run.RouteID, numofpass.total
-FROM (SELECT ShipID, COUNT(SIN) AS total 
-      FROM Take
-      GROUP BY ShipID) numofpass, Run
-WHERE Run.ShipID = numofpass.ShipID AND numofpass.total =  (SELECT MAX(Temp.total)
-							    FROM (SELECT ShipID, COUNT(SIN) AS total 
-								  FROM Take
-		     						  GROUP BY ShipID) Temp);
-
+SELECT RouteID, Total as "number of times"
+FROM (SELECT RouteID, COUNT(*) as Total
+	  FROM Take, ship
+	  WHERE Take.shipID = ship.shipID AND Date = "2019-09-07"
+	  GROUP BY RouteID) p
+WHERE p.Total = (SELECT MAX(temp.Total)
+				 FROM (SELECT RouteID, COUNT(*) as Total
+					   FROM Take, ship
+					   WHERE Take.shipID = ship.shipID AND Date = "2019-09-07"
+					   GROUP BY RouteID)temp  );
 -- ++++++++++++++++++++
 --  Q6.C
 -- ++++++++++++++++++++
@@ -184,9 +185,9 @@ WHERE Pilot.SIN = Person.SIN AND YearsOfService > 5 AND Salary > 75000 AND Pilot
 SELECT FirstName, LastName, Sex, Number, Person.SIN
 FROM Person, Phone
 WHERE Person.SIN = Phone.SIN AND Person.SIN IN (SELECT Take.SIN
-						FROM Take, Run, Go
-						WHERE Take.ShipID = Run.ShipID AND Run.RouteID = 4);
-
+						FROM Take, Ship, Go, Sites, Event
+						WHERE Take.ShipID = Ship.ShipID AND Ship.RouteID = Go.RouteID AND Go.RouteID = 4 AND Sites.SIName = Go.SIName 
+                                                AND Sites.SIName ="Jedi Temple" AND Event.SIName = Sites.SIName AND Event.EName = "Jedi Knight Basketball");
 -- ++++++++++++++++++++
 --  Q10
 -- ++++++++++++++++++++
