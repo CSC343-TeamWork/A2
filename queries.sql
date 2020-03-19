@@ -192,19 +192,14 @@ WHERE Person.SIN = Phone.SIN AND Person.SIN IN (SELECT Take.SIN
 --  Q10
 -- ++++++++++++++++++++
 
-select 
-	Schedule.RouteID AS "Route ID", Schedule.ArrivalTime AS "Arrival Time", Stop.SName AS "Stop Name"
-	From Stop, Schedule, Go, Event
-	where 
-		(Schedule.RouteID in (select Go.RouteID from Go where SIName in(select SIName from Event where EName="YG 4hunnid Concert" and Date="2019-09-06" and Time="18:30:00")))
-	and 
-		(Schedule.ArrivalTime between "16:00:00" and "17:00:00")
-	and
-		(Stop.StopID = Schedule.StopID)
- 	and
-		(Stop.SIName in(select SIName from Event where EName="YG 4hunnid Concert" and Date="2019-09-06" and Time="18:30:00"))
-	and 
-		(Stop.PhoneNumber in(select PhoneNumber from Event where EName="YG 4hunnid Concert" and Date="2019-09-06" and Time="18:30:00"));
+select Distinct RouteID AS "Route ID", SName AS "Stop Name", ArrivalTime AS "Arrival Time" 
+from Schedule, Event, Stop 
+where 
+(Schedule.ArrivalTime between "16:00:00" and "17:00:00") 
+and (Schedule.Date="2019-09-06")
+and(Stop.SIName in (select SIName from Event where EName="YG 4hunnid Concert" and Date="2019-09-06" and Time="18:30:00" ))
+and(Stop.PhoneNumber in (select PhoneNumber from Event where EName="YG 4hunnid Concert" and Date="2019-09-06" and Time="18:30:00" ))
+Order by RouteID;
 
 
 
