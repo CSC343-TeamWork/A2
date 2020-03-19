@@ -150,12 +150,12 @@ FROM (SELECT Take.Date, COUNT(SIN) AS total_pass
 --  Q7.A
 -- ++++++++++++++++++++
 
-SELECT Person.Occupation, COUNT(*) AS Occuernces
+SELECT Person.Occupation, COUNT(*) AS occurrences
 FROM Person
 WHERE SIN IN (SELECT temp_SIN
 			  FROM (SELECT DISTINCT Person.SIN AS temp_SIN, Go.SIname, Take.Date
-					FROM Take, Person, Go, Run
-					WHERE Go.SIName REGEXP "Library" AND Go.RouteID = Run.RouteID AND Take.ShipID = Run.ShipID AND Take.Date IN ("2019-09-05", "2019-09-06") AND Person.SIN = Take.SIN) uniqtable)
+					FROM Take, Person, Go, Ship
+					WHERE Go.SIName REGEXP "Library" AND Go.RouteID = Ship.RouteID AND Take.ShipID = Ship.ShipID AND Take.Date IN ("2019-09-05", "2019-09-06") AND Person.SIN = Take.SIN) uniqtable)
 GROUP BY Person.Occupation;
 -- ++++++++++++++++++++
 --  Q7.B
