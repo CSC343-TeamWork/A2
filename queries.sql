@@ -192,7 +192,18 @@ WHERE Person.SIN = Phone.SIN AND Person.SIN IN (SELECT Take.SIN
 --  Q10
 -- ++++++++++++++++++++
 
--- Your code goes here (replace this line with your query)
+select 
+	Schedule.RouteID, Schedule.ArrivalTime, Stop.SName
+	From Stop, Schedule, Contain, Go, Sites, Event
+	where 
+		(Schedule.RouteID in (select Go.RouteID from Go where SIName in(select SIName from Event where EName="YG 4hunnid Concert" and Date="2019-09-06" and Time="18:30:00"))
+	and 
+		(Schedule.ArrivalTime between "16:00:00" and "17:00:00")) 
+	and
+		(Stop.StopID = Schedule.StopID)
+ 	and
+		(Stop.SIName in (select SIName from Event where EName="YG 4hunnid Concert" and Date="2019-09-06" and Time="18:30:00"));
+
 
 -- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 -- END
