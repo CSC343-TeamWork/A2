@@ -15,9 +15,9 @@
 -- Partner 1's Student Number: 1003489691
 -- Partner 1's UtorID: issamoh2
 
--- Parter 2's Name: [insert name]
--- Partner 2's Student Number: [insert student number]
--- Partner 2's UtorID: [insert University of Toronto Identifier]
+-- Parter 2's Name: Weiyi Hu
+-- Partner 2's Student Number: 1004373581
+-- Partner 2's UtorID: huweiyi
 
 -- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 -- BEGIN
@@ -38,7 +38,7 @@ WHERE DateOfBirth <= "1954-11-14";
 SELECT COUNT(*) AS "Taken"
 FROM Take
 WHERE "2019-09-04" = Date AND ShipID IN (SELECT ShipID
-		 			 FROM Run
+		 			 FROM Ship
 		 			 WHERE RouteID = 1);
 					
 -- ++++++++++++++++++++
@@ -54,7 +54,7 @@ WHERE AdvertisingRevenue > 10000;
 -- ++++++++++++++++++++
 SELECT FirstName, LastName, YearsOfService, ShipID
 FROM Pilot, Person, Ship
-WHERE Pilot.SIN = Person.SIN AND (Person.SIN, Ship.ShipID) IN (SELECT *
+WHERE Pilot.SIN = Person.SIN AND (Pilot.SIN, Ship.ShipID) IN (SELECT *
 				                               FROM Operate
 							       WHERE ShipID IN (SELECT ShipID 
 							       			FROM Ship
@@ -63,10 +63,8 @@ WHERE Pilot.SIN = Person.SIN AND (Person.SIN, Ship.ShipID) IN (SELECT *
 -- ++++++++++++++++++++
 --  Q3.C
 -- ++++++++++++++++++++
-SELECT RouteId, SUM(AdvertisingRevenue) AS "Total Revenue"
-FROM Ship, Route, Run 
-WHERE Ship.ShipID = Run.ShipID AND Route.RouteID = Run.RouteID
-GROUP BY Route.RouteID;
+SELECT RouteID, SUM(AdvertisingRevenue) AS "Total Revenue"
+FROM Ship GROUP BY RouteID ORDER BY SUM(AdvertisingRevenue) DESC;
 -- ++++++++++++++++++++
 --  Q4.A
 -- ++++++++++++++++++++
